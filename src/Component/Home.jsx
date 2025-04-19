@@ -41,45 +41,65 @@ const Home = () => {
   const [showEmailConfirmation, setShowEmailConfirmation] = useState(false);
   const [showRegisterPopup, setShowRegisterPopup] = useState(false);
   const [showCryptoRegister, setShowCryptoRegister] = useState(false);
+  const [showSwapPopup, setShowSwapPopup] = useState(false);
+  const [showTransactionPopup, setShowTransactionPopup] = useState(false);
+  const [showCountrySelector, setShowCountrySelector] = useState(false);
+  const [swapAmount, setSwapAmount] = useState('');
+  const [transactionId, setTransactionId] = useState('');
+  const [showCopyToast, setShowCopyToast] = useState(false);
+  const [showSubmitToast, setShowSubmitToast] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState({
     name: 'India',
     flag: '🇮🇳',
     code: 'IN'
   });
-  const [showWelcomeSlider, setShowWelcomeSlider] = useState(true);
-  const [currentSlide, setCurrentSlide] = useState(0);
   const [showAdminPanel, setShowAdminPanel] = useState(false);
+  const [walletId] = useState('0x1234567890abcdef1234567890abcdef12345678');
+  const [transactions, setTransactions] = useState([
+    {
+      seller: "Kumar Rahul",
+      rating: 5,
+      transactions: "96 Transactions",
+      price: "0.8 USDT",
+      available: "94,892.39 PI",
+      limit: "5 - 10,000 USDT",
+      transactionId: "TX78945612",
+      time: "2024-03-19 14:30"
+    },
+    {
+      seller: "cory84",
+      rating: 1,
+      transactions: "0 Transaction",
+      price: "0.206 USDT",
+      available: "177 PI",
+      limit: "5 - 36.461 USDT",
+      transactionId: "TX45612378",
+      time: "2024-03-19 14:25"
+    },
+    {
+      seller: "GHERBIABDALHAMID",
+      rating: 0,
+      transactions: "0 Transaction",
+      price: "0.205 USDT",
+      available: "763.67 PI",
+      limit: "5 - 156.552 USDT",
+      transactionId: "TX96325874",
+      time: "2024-03-19 14:20"
+    },
+    {
+      seller: "zainminhas@gmail.com",
+      rating: 0,
+      transactions: "0 Transaction",
+      price: "0.2 USDT",
+      available: "100 PI",
+      limit: "5 - 20 USDT",
+      transactionId: "TX15975364",
+      time: "2024-03-19 14:15"
+    }
+  ]);
 
   const faqRef = useRef(null);
   const navigate = useNavigate();
-
-  const welcomeImages = [main2, main3, main4, main5];
-  const slideInterval = useRef(null);
-
-  useEffect(() => {
-    if (showWelcomeSlider) {
-      slideInterval.current = setInterval(() => {
-        setCurrentSlide((prev) => (prev + 1) % welcomeImages.length);
-      }, 3000); // Change slide every 3 seconds
-    }
-    return () => {
-      if (slideInterval.current) {
-        clearInterval(slideInterval.current);
-      }
-    };
-  }, [showWelcomeSlider]);
-
-  // Add click outside handler to close dropdown
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (isOpen && !event.target.closest('.country-selector')) {
-        setIsOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [isOpen]);
 
   const countries = [
     { name: 'India', flag: '🇮🇳', code: 'IN' },
@@ -91,7 +111,7 @@ const Home = () => {
     { name: 'France', flag: '🇫🇷', code: 'FR' },
     { name: 'Japan', flag: '🇯🇵', code: 'JP' },
     { name: 'China', flag: '🇨🇳', code: 'CN' },
-    { name: 'Russia', flag: '🇷🇺', code: 'RU' },
+    { name: 'Brazil', flag: '🇧🇷', code: 'BR' }
   ];
 
   const handleModeToggle = (mode) => {
@@ -161,80 +181,41 @@ const Home = () => {
     setShowAdminPanel(true);
   };
 
+  const handleCopyWallet = async () => {
+    try {
+      await navigator.clipboard.writeText(walletId);
+      setShowCopyToast(true);
+      setTimeout(() => setShowCopyToast(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy text: ', err);
+    }
+  };
+
+  const handleTransactionSubmit = () => {
+    const newTransaction = {
+      seller: "Your Name",
+      rating: 0,
+      transactions: "0 Transaction",
+      price: `${swapAmount} USDT`,
+      available: `${(parseFloat(swapAmount) || 0) * 5} PI`,
+      limit: `5 - ${swapAmount} USDT`,
+      transactionId: transactionId,
+      time: new Date().toLocaleString()
+    };
+
+    setTransactions([newTransaction, ...transactions]);
+    setShowTransactionPopup(false);
+    setSwapAmount('');
+    setTransactionId('');
+    setShowSubmitToast(true);
+    setTimeout(() => setShowSubmitToast(false), 2000);
+  };
+
   return (
     <div className="relative">
-      {/* Welcome Slider Popup */}
-      {showWelcomeSlider && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#4B0082] bg-opacity-95 p-4">
-          <div className="relative bg-[#663399] rounded-3xl p-4 md:p-6 w-full max-w-4xl mx-auto">
-            {/* Close Button */}
-            <button
-              onClick={() => setShowWelcomeSlider(false)}
-              className="absolute right-4 md:right-6 top-4 md:top-6 text-white hover:text-gray-300 z-10"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-
-            {/* Slider */}
-            <div className="relative h-[300px] md:h-[500px] overflow-hidden rounded-2xl border-2 border-[#9370DB]">
-              {welcomeImages.map((image, index) => (
-                <div
-                  key={index}
-                  className={`absolute inset-0 transition-transform duration-500 ease-in-out ${
-                    index === currentSlide ? 'translate-x-0' : 'translate-x-full'
-                  }`}
-                  style={{
-                    transform: `translateX(${(index - currentSlide) * 100}%)`,
-                  }}
-                >
-                  <img
-                    src={image}
-                    alt={`Slide ${index + 1}`}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              ))}
-            </div>
-
-            {/* Navigation Dots */}
-            <div className="absolute bottom-8 left-0 right-0 flex justify-center gap-2">
-              {welcomeImages.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentSlide(index)}
-                  className={`w-3 h-3 rounded-full transition-colors ${
-                    index === currentSlide ? 'bg-white' : 'bg-white/30'
-                  }`}
-                />
-              ))}
-            </div>
-
-            {/* Navigation Arrows */}
-            <button
-              onClick={() => setCurrentSlide((prev) => (prev - 1 + welcomeImages.length) % welcomeImages.length)}
-              className="absolute left-4 top-1/2 -translate-y-1/2 bg-[#9370DB] text-white rounded-full p-2 hover:bg-[#8A2BE2] transition-colors"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
-              </svg>
-            </button>
-            <button
-              onClick={() => setCurrentSlide((prev) => (prev + 1) % welcomeImages.length)}
-              className="absolute right-4 top-1/2 -translate-y-1/2 bg-[#9370DB] text-white rounded-full p-2 hover:bg-[#8A2BE2] transition-colors"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
-          </div>
-        </div>
-      )}
-
       <div className='bg-gradient-to-b from-[#4B0082] to-[#663399] min-h-screen py-4 md:py-8'>
         {/* Marquee Section */}
-        <div className="w-full overflow-hidden whitespace-nowrap bg-[#4B0082] text-white py-2 mb-4 md:mb-6 text-sm md:text-base">
+        <div className="w-full overflow-hidden whitespace-nowrap bg-[#4B0082] text-yellow-500 py-2 mb-4 md:mb-6 text-sm md:text-base">
           <div className="animate-marquee flex space-x-16">
             <p>Total Transaction Volume: ATH: 126M GEM: 6T USDT: 25M Other: 18T</p>
             <p>Total Commission: ATH: 3.2M GEM: 127B USDT: 1.3M</p>
@@ -256,11 +237,11 @@ const Home = () => {
         {/* Main Container */}
         <div className="w-full max-w-7xl mx-auto px-4">
           {/* Navigation Bar */}
-          <nav className="flex items-center justify-between px-4 md:px-8 py-4 bg-[#663399] rounded-2xl shadow-lg mb-4 md:mb-8">
+          <nav className="flex items-center justify-between px-4 md:px-8 py-4 bg-white rounded-2xl shadow-lg mb-4 md:mb-8">
             {/* Left side - Logo and Brand */}
             <div className="flex items-center gap-4">
               <img src={logo} alt="logo" className="w-20 md:w-24 h-auto" />
-              <span className="bold text-yellow-400">PiSawp Network</span>
+              <span className="bold text-yellow-500">PiSawp Network</span>
             </div>
 
             {/* Right side - Buttons and Menu */}
@@ -268,7 +249,7 @@ const Home = () => {
               {/* Login Button */}
               <button 
                 onClick={() => setShowLoginPopup(true)} 
-                className="text-yellow-400 hover:text-yellow-300 transition-colors"
+                className="bold text-yellow-500 hover:text-[#663399] transition-colors"
               >
                 Login
               </button>
@@ -277,7 +258,7 @@ const Home = () => {
               <div className="relative md:hidden">
                 <button 
                   onClick={() => setIsOpen(!isOpen)}
-                  className="flex items-center justify-center p-2 text-yellow-400"
+                  className="flex items-center justify-center p-2 text-[#4B0082]"
                 >
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
@@ -286,14 +267,14 @@ const Home = () => {
 
                 {/* Mobile Menu Dropdown */}
                 {isOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-[#663399] rounded-lg shadow-lg py-2 z-50">
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50">
                     <button 
                       onClick={() => setShowRegisterPopup(true)}
-                      className="w-full text-left px-4 py-2 text-yellow-400 hover:bg-[#9370DB]"
+                      className="w-full text-left px-4 py-2 text-[#4B0082] hover:bg-gray-100"
                     >
                       Register
                     </button>
-                    <div className="border-t border-[#9370DB] my-2"></div>
+                    <div className="border-t border-gray-200 my-2"></div>
                     <div className="max-h-60 overflow-y-auto">
                       {countries.map((country) => (
                         <button
@@ -302,8 +283,8 @@ const Home = () => {
                             setSelectedCountry(country);
                             setIsOpen(false);
                           }}
-                          className={`w-full text-left px-4 py-2 text-yellow-400 hover:bg-[#9370DB] flex items-center gap-2 ${
-                            selectedCountry.code === country.code ? 'bg-[#9370DB]' : ''
+                          className={`w-full text-left px-4 py-2 text-[#4B0082] hover:bg-gray-100 flex items-center gap-2 ${
+                            selectedCountry.code === country.code ? 'bg-gray-100' : ''
                           }`}
                         >
                           <span className="text-xl">{country.flag}</span>
@@ -319,14 +300,14 @@ const Home = () => {
               <div className="hidden md:flex items-center gap-4">
                 <button 
                   onClick={() => setShowRegisterPopup(true)}
-                  className="bg-[#9370DB] text-yellow-400 px-4 py-2 rounded-full hover:bg-[#8A2BE2] transition"
+                  className="bg-[#4B0082] text-white px-4 py-2 rounded-full hover:bg-[#663399] transition"
                 >
                   Register
                 </button>
                 <div className="relative">
                   <button 
-                    onClick={() => setIsOpen(!isOpen)}
-                    className="flex items-center justify-center gap-2 px-4 py-2 border border-[#9370DB] rounded-lg text-yellow-400 hover:bg-[#9370DB] country-selector"
+                    onClick={() => setShowCountrySelector(!showCountrySelector)}
+                    className="flex items-center justify-center gap-2 px-4 py-2 border border-[#4B0082] rounded-lg text-[#4B0082] hover:bg-gray-100"
                   >
                     <span className="text-xl">{selectedCountry.flag}</span>
                     <span className="text-sm font-medium">{selectedCountry.name}</span>
@@ -334,6 +315,29 @@ const Home = () => {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
                     </svg>
                   </button>
+
+                  {/* Desktop Country Dropdown */}
+                  {showCountrySelector && (
+                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50">
+                      <div className="max-h-60 overflow-y-auto">
+                        {countries.map((country) => (
+                          <button
+                            key={country.code}
+                            onClick={() => {
+                              setSelectedCountry(country);
+                              setShowCountrySelector(false);
+                            }}
+                            className={`w-full text-left px-4 py-2 text-[#4B0082] hover:bg-gray-100 flex items-center gap-2 ${
+                              selectedCountry.code === country.code ? 'bg-gray-100' : ''
+                            }`}
+                          >
+                            <span className="text-xl">{country.flag}</span>
+                            <span className="text-sm font-medium">{country.name}</span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -354,135 +358,160 @@ const Home = () => {
             <img src={main1} alt="Main Banner" className="w-full h-auto rounded-2xl shadow-lg" />
           </div>
 
-          {/* Image Grid Section */}
-          <div className="mb-4 md:mb-8 px-4">
-            <div className="flex overflow-x-auto gap-4 md:gap-6 pb-4 md:grid md:grid-cols-4 scrollbar-hide">
-              <div className="flex-none w-[280px] md:w-auto">
-                <img src={main2} alt="Feature 1" className="w-full h-32 md:h-48 object-cover rounded-xl shadow-md hover:shadow-lg transition-shadow" />
-              </div>
-              <div className="flex-none w-[280px] md:w-auto">
-                <img src={main3} alt="Feature 2" className="w-full h-32 md:h-48 object-cover rounded-xl shadow-md hover:shadow-lg transition-shadow" />
-              </div>
-              <div className="flex-none w-[280px] md:w-auto">
-                <img src={main4} alt="Feature 3" className="w-full h-32 md:h-48 object-cover rounded-xl shadow-md hover:shadow-lg transition-shadow" />
-              </div>
-              <div className="flex-none w-[280px] md:w-auto">
-                <img src={main5} alt="Feature 4" className="w-full h-32 md:h-48 object-cover rounded-xl shadow-md hover:shadow-lg transition-shadow" />
-              </div>
+          {/* Image Grid Section - Outside the box */}
+          <div className="flex md:grid md:grid-cols-4 gap-4 p-4 overflow-x-auto pb-4 mx-4">
+            <div className="flex-none w-[280px] md:w-auto relative group overflow-hidden rounded-lg">
+              <img 
+                src={main2} 
+                alt="Trading Image 1" 
+                className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"
+              />
+              <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors duration-300"></div>
+            </div>
+            <div className="flex-none w-[280px] md:w-auto relative group overflow-hidden rounded-lg">
+              <img 
+                src={main3} 
+                alt="Trading Image 2" 
+                className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"
+              />
+              <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors duration-300"></div>
+            </div>
+            <div className="flex-none w-[280px] md:w-auto relative group overflow-hidden rounded-lg">
+              <img 
+                src={main4} 
+                alt="Trading Image 3" 
+                className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"
+              />
+              <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors duration-300"></div>
+            </div>
+            <div className="flex-none w-[280px] md:w-auto relative group overflow-hidden rounded-lg">
+              <img 
+                src={main5} 
+                alt="Trading Image 4" 
+                className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"
+              />
+              <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors duration-300"></div>
             </div>
           </div>
 
           {/* Trading Box Container */}
-          <div className="bg-[#663399] rounded-2xl shadow-lg overflow-hidden mx-4">
+          <div className="bg-white rounded-2xl shadow-lg overflow-hidden mx-4">
             {/* Trading Section */}
             <div className="px-4 md:px-8 py-4 md:py-6">
               {/* Buy/Sell and Coins Section */}
-              <div className="flex flex-col md:flex-row items-center justify-between mb-6 border-b border-[#9370DB] pb-4 space-y-4 md:space-y-0">
-                <div className="flex items-center gap-4 w-full md:w-auto">
+              <div className="flex flex-col md:flex-row items-center justify-start mb-6 border-b border-[#9370DB] pb-4 space-y-4 md:space-y-0">
+                <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
                   <button 
                     onClick={() => handleModeToggle('buy')}
-                    className={`relative px-8 md:px-12 py-2.5 font-medium transition-colors shadow-sm w-full md:w-auto ${
-                      !isSellMode 
-                        ? 'bg-[#9370DB] text-white' 
-                        : 'bg-[#E8E8E8] text-[#464646] hover:bg-gray-100'
-                    }`}
+                    className="relative px-8 md:px-12 py-2.5 font-medium transition-colors shadow-sm w-full md:w-auto bg-[#9370DB] text-white flex items-center justify-center"
                     style={{
                       clipPath: 'polygon(0 0, 100% 0, 90% 100%, 0% 100%)',
                       borderRadius: '8px'
                     }}
                   >
-                    <span className="relative z-10">Buy</span>
-                  </button>
-                  <button 
-                    onClick={() => handleModeToggle('sell')}
-                    className={`relative px-8 md:px-12 py-2.5 font-medium transition-colors shadow-sm w-full md:w-auto ${
-                      isSellMode 
-                        ? 'bg-[#9370DB] text-white hover:bg-[#8A2BE2]' 
-                        : 'bg-[#E8E8E8] text-[#464646] hover:bg-gray-100'
-                    }`}
-                    style={{
-                      clipPath: 'polygon(0 0, 100% 0, 100% 100%, 10% 100%)',
-                      borderRadius: '8px'
-                    }}
-                  >
-                    <span className="relative z-10">Sell</span>
-                  </button>
-                </div>
-
-                <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4 w-full md:w-auto">
-                  <button className={`flex items-center gap-2 px-6 py-2.5 rounded-lg whitespace-nowrap transition-colors w-full md:w-auto ${
-                    isSellMode ? 'bg-red-500 text-white hover:bg-red-600' : 'bg-[#0B1426] text-white hover:bg-gray-800'
-                  }`}>
-                    <img src={piIcon} alt="PI" className="w-5 h-5" />
-                    <span>PI</span>
+                    <span className="relative z-10">Swap Coin</span>
                   </button>
 
-                  <div className="relative w-full md:w-64">
+                  <div className="relative w-full md:w-64 order-2 md:order-none">
                     <input 
                       type="text" 
                       placeholder="Enter amount" 
+                      value={swapAmount}
+                      onChange={(e) => setSwapAmount(e.target.value)}
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
                     />
                     <span className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500">USDT</span>
                   </div>
+
+                  <button 
+                    onClick={() => setShowSwapPopup(true)}
+                    className="flex items-center justify-center gap-2 px-8 md:px-12 py-2.5 rounded-lg whitespace-nowrap transition-colors w-full md:w-auto bg-[#0B1426] text-white hover:bg-gray-800 order-3"
+                  >
+                    <img src={piIcon} alt="PI" className="w-5 h-5" />
+                    <span>Swap</span>
+                  </button>
                 </div>
               </div>
 
               {/* Table Section */}
               <div className="border-t border-gray-100 overflow-x-auto">
-                {/* Table Header */}
-                <div className="grid grid-cols-4 py-4 border-b border-[#9370DB] min-w-[600px]">
-                  <div className="text-yellow-400 font-semibold px-2">{isSellMode ? 'Buyer' : 'Seller'}</div>
-                  <div className="text-yellow-400 font-semibold px-2">Price</div>
-                  <div className="text-yellow-400 font-semibold px-2">Available/Limit</div>
-                  <div className="text-yellow-400 font-semibold px-2">Transaction</div>
-                </div>
-
                 {/* Table Content */}
-                <div className="divide-y divide-gray-100 min-w-[600px]">
-                  {[
-                    {
-                      seller: "hungnguyen0101197999@gmail.com",
-                      transactions: "0 Transaction",
-                      price: "0.9 USDT",
-                      available: "109.4 PI",
-                      limit: "98.4582 USDT",
-                    },
-                    {
-                      seller: "wasimwasimhd@gmail.com",
-                      transactions: "5 Transactions",
-                      price: "1.1 USDT",
-                      available: "554.59 PI",
-                      limit: "5 - 665.2 USDT",
-                    },
-                  ].map((item, index) => (
-                    <div 
-                      key={index} 
-                      className="grid grid-cols-4 py-6 items-center transition-colors focus:border-2 focus:border-white"
-                      tabIndex="0"
-                    >
-                      <div className="px-2 md:px-4">
-                        <p className="text-yellow-400 font-normal truncate">{item.seller}</p>
-                        <p className="text-yellow-400 text-sm font-normal">{item.transactions}</p>
-                      </div>
-                      <div className="px-2 md:px-4">
-                        <div className="flex items-baseline">
-                          <span className="text-xl font-normal text-yellow-400">{item.price.split(' ')[0]}</span>
-                          <span className="ml-1 text-yellow-400 font-normal">{item.price.split(' ')[1]}</span>
+                <div className="min-w-[600px] md:min-w-0">
+                  {/* Table Header */}
+                  <div className="hidden md:grid md:grid-cols-5 py-4 border-b border-gray-200">
+                    <div className="text-gray-500 font-medium px-4">Buyer Name</div>
+                    <div className="text-gray-500 font-medium px-4">Price</div>
+                    <div className="text-gray-500 font-medium px-4">Coin Quantity</div>
+                    <div className="text-gray-500 font-medium px-4">Transaction ID</div>
+                    <div className="text-gray-500 font-medium px-4">Time</div>
+                  </div>
+
+                  {transactions.map((item, index) => (
+                    <div key={index}>
+                      {/* Mobile View */}
+                      <div className="block md:hidden bg-white rounded-lg mb-4 p-4 shadow-lg hover:bg-gray-50">
+                        <div className="flex flex-col">
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className="text-gray-900 font-medium">{item.seller}</span>
+                            <div className="flex">
+                              {[...Array(5)].map((_, i) => (
+                                <span key={i} className={i < item.rating ? "text-yellow-400" : "text-gray-200"}>
+                                  ★
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                          <p className="text-gray-500 text-sm mb-3">{item.transactions}</p>
+                          
+                          <div className="flex justify-between items-center mb-3">
+                            <div>
+                              <span className="text-xl font-medium text-gray-900">{item.price.split(' ')[0]}</span>
+                              <span className="ml-1 text-gray-500">{item.price.split(' ')[1]}</span>
+                            </div>
+                          </div>
+
+                          <div className="space-y-1 mb-4">
+                            <p>
+                              <span className="text-gray-900">{item.available}</span>
+                            </p>
+                            <p className="text-gray-500">{item.limit}</p>
+                            <p className="text-gray-900">ID: {item.transactionId}</p>
+                            <p className="text-gray-500">{item.time}</p>
+                          </div>
                         </div>
                       </div>
-                      <div className="px-2 md:px-4">
-                        <p className="text-yellow-400 font-normal">{item.available}</p>
-                        <p className="text-yellow-400 text-sm font-normal">{item.limit}</p>
-                      </div>
-                      <div className="px-2 md:px-4">
-                        <button className={`px-8 py-2 rounded-full transition-colors font-bold ${
-                          isSellMode 
-                            ? 'bg-[#9370DB] text-yellow-400 hover:bg-[#8A2BE2]' 
-                            : 'bg-[#9370DB] text-yellow-400 hover:bg-[#8A2BE2]'
-                        }`}>
-                          {isSellMode ? 'Sell' : 'Buy'}
-                        </button>
+
+                      {/* Desktop View */}
+                      <div className="hidden md:grid md:grid-cols-5 py-4 border-b border-gray-100 hover:bg-gray-50">
+                        <div className="px-4">
+                          <div className="flex items-center gap-2">
+                            <span className="text-gray-900 font-medium">{item.seller}</span>
+                            <div className="flex">
+                              {[...Array(5)].map((_, i) => (
+                                <span key={i} className={i < item.rating ? "text-yellow-400" : "text-gray-200"}>
+                                  ★
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                          <p className="text-gray-500 text-sm">{item.transactions}</p>
+                        </div>
+                        <div className="px-4 flex items-center">
+                          <div>
+                            <span className="text-xl font-medium text-gray-900">{item.price.split(' ')[0]}</span>
+                            <span className="ml-1 text-gray-500">{item.price.split(' ')[1]}</span>
+                          </div>
+                        </div>
+                        <div className="px-4 flex flex-col justify-center">
+                          <p className="text-gray-900">{item.available}</p>
+                          <p className="text-gray-500">{item.limit}</p>
+                        </div>
+                        <div className="px-4 flex flex-col justify-center">
+                          <p className="text-gray-900">{item.transactionId}</p>
+                        </div>
+                        <div className="px-4 flex flex-col justify-center">
+                          <p className="text-gray-500">{item.time}</p>
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -533,26 +562,6 @@ const Home = () => {
         </div>
       </div>
 
-      {/* Earn More Section
-      <div className="w-full max-w-7xl mx-auto px-4 bg-white mt-8 md:mt-12">
-        <div className="flex flex-col md:flex-row items-center justify-between py-6 md:py-8">
-          <div className="w-full md:w-1/2 text-center md:text-left mb-6 md:mb-0">
-            <h1 className="text-2xl md:text-3xl font-bold mb-4">Earn more ATH on the Piswap App</h1>
-            <p className="mb-4 font-bold">
-              You can download the Piswap app on the App Store or Google Play.<br />
-              Then register an account to receive many promotions.
-            </p>
-            <div className="flex flex-col md:flex-row gap-4 justify-center md:justify-start">
-              <img src={e2} alt="App Store" className="w-[140px] md:w-[180px] mx-auto md:mx-0" />
-              <img src={e3} alt="Google Play" className="w-[140px] md:w-[180px] mx-auto md:mx-0" />
-            </div>
-          </div>
-          <div className="w-full md:w-1/2 flex justify-center md:justify-end">
-            <img src={e1} alt="Mobile App" className="w-full max-w-[300px] md:max-w-[500px] h-auto" />
-          </div>
-        </div>
-      </div> */}
-
       {/* FAQ Section */}
       <div ref={faqRef} className="w-full max-w-7xl mx-auto px-4 bg-white mt-8 md:mt-12 py-6">
         <h1 className="text-2xl md:text-3xl font-bold mb-6">FAQ About P2P Trading</h1>
@@ -584,9 +593,9 @@ const Home = () => {
       {/* Footer */}
       <footer className="bg-[#4B0082] text-white py-8">
         <div className="container mx-auto px-4">
-          <div className="flex flex-wrap justify-between items-center">
+          <div className="flex flex-col md:flex-row justify-between items-center">
             {/* Logo */}
-            <div className="flex justify-start">
+            <div className="flex justify-center w-full md:justify-start md:w-auto mb-4 md:mb-0">
               <img src={logo} alt="logo" className="w-28 md:w-36 h-auto" />
             </div>
 
@@ -595,7 +604,6 @@ const Home = () => {
               {/* Links */}
               <div className="flex flex-wrap justify-center md:justify-start gap-4 md:gap-6 font-bold text-sm md:text-base">
                 <p>PiSawp Network</p>
-                {/* <p>Download App</p> */}
                 <Link to="/Privacy" className="hover:underline cursor-pointer">Privacy Policy</Link>
                 <Link to="/terms-of-use" className="hover:underline cursor-pointer">Terms of Use</Link>
                 <button 
@@ -743,6 +751,187 @@ const Home = () => {
           </div>
         </div>
       )}
+
+      {/* Swap Confirmation Popup */}
+      {showSwapPopup && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          {/* Blurred Background */}
+          <div 
+            className="absolute inset-0 bg-black/30 backdrop-blur-sm"
+            onClick={() => setShowSwapPopup(false)}
+          ></div>
+          
+          {/* Swap Form */}
+          <div className="relative bg-white rounded-[32px] p-8 w-[400px] shadow-xl">
+            {/* Close Button */}
+            <button 
+              onClick={() => setShowSwapPopup(false)}
+              className="absolute right-6 top-6 text-gray-400 hover:text-gray-600"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+
+            {/* Swap Form Content */}
+            <div className="space-y-6">
+              <h2 className="text-2xl font-bold text-center text-gray-900">Confirm Swap</h2>
+              
+              <div className="bg-gray-50 p-4 rounded-lg space-y-3">
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-600">Amount</span>
+                  <span className="text-gray-900 font-medium">{swapAmount} USDT</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-600">You will receive</span>
+                  <span className="text-gray-900 font-medium">{(parseFloat(swapAmount) || 0) * 5} PI</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-600">Exchange Rate</span>
+                  <span className="text-gray-900 font-medium">1 USDT = 5 PI</span>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <button
+                  onClick={() => {
+                    setShowSwapPopup(false);
+                    setShowTransactionPopup(true);
+                  }}
+                  className="w-full bg-[#4B0082] text-white py-3 rounded-full hover:bg-[#663399] transition-colors font-medium text-lg"
+                >
+                  Confirm Swap
+                </button>
+                <button
+                  onClick={() => setShowSwapPopup(false)}
+                  className="w-full bg-gray-100 text-gray-800 py-3 rounded-full hover:bg-gray-200 transition-colors font-medium text-lg"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Transaction Details Popup */}
+      {showTransactionPopup && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          {/* Blurred Background */}
+          <div 
+            className="absolute inset-0 bg-black/30 backdrop-blur-sm"
+            onClick={() => setShowTransactionPopup(false)}
+          ></div>
+          
+          {/* Transaction Form */}
+          <div className="relative bg-white rounded-[32px] p-8 w-[500px] shadow-xl">
+            {/* Close Button */}
+            <button 
+              onClick={() => setShowTransactionPopup(false)}
+              className="absolute right-6 top-6 text-gray-400 hover:text-gray-600"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+
+            {/* Transaction Form Content */}
+            <div className="space-y-6">
+              <h2 className="text-2xl font-bold text-center text-gray-900">Transaction Details</h2>
+              
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-[16px] font-medium text-gray-700 mb-2">
+                    Wallet Address
+                  </label>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="text"
+                      value={walletId}
+                      readOnly
+                      className="w-full px-4 py-3 bg-gray-50 rounded-lg border border-gray-200 text-gray-600"
+                    />
+                    <button
+                      onClick={handleCopyWallet}
+                      className="px-4 py-3 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+                    >
+                      <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+
+                <div className="bg-yellow-50 p-4 rounded-lg">
+                  <p className="text-yellow-800 text-sm">
+                    Please send <span className="font-bold">{swapAmount} USDT</span> to the wallet address above. 
+                    After completing the transaction, enter the transaction ID below.
+                  </p>
+                </div>
+
+                <div>
+                  <label className="block text-[16px] font-medium text-gray-700 mb-2">
+                    Transaction ID
+                  </label>
+                  <input
+                    type="text"
+                    value={transactionId}
+                    onChange={(e) => setTransactionId(e.target.value)}
+                    placeholder="Enter your transaction ID"
+                    className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:border-[#4B0082]"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <button
+                  onClick={handleTransactionSubmit}
+                  disabled={!transactionId}
+                  className={`w-full py-3 rounded-full font-medium text-lg ${
+                    transactionId 
+                      ? 'bg-[#4B0082] text-white hover:bg-[#663399]' 
+                      : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                  } transition-colors`}
+                >
+                  Submit Transaction
+                </button>
+                <button
+                  onClick={() => setShowTransactionPopup(false)}
+                  className="w-full bg-gray-100 text-gray-800 py-3 rounded-full hover:bg-gray-200 transition-colors font-medium text-lg"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Toast Notifications */}
+      {showCopyToast && (
+        <div className="fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-fade-in-out">
+          Wallet address copied successfully!
+        </div>
+      )}
+
+      {showSubmitToast && (
+        <div className="fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-fade-in-out">
+          Transaction submitted successfully!
+        </div>
+      )}
+
+      {/* Add this to your existing styles or create a new CSS file */}
+      <style jsx>{`
+        @keyframes fade-in-out {
+          0% { opacity: 0; transform: translateY(20px); }
+          10% { opacity: 1; transform: translateY(0); }
+          90% { opacity: 1; transform: translateY(0); }
+          100% { opacity: 0; transform: translateY(20px); }
+        }
+        .animate-fade-in-out {
+          animation: fade-in-out 2s ease-in-out forwards;
+        }
+      `}</style>
 
     </div>
   );
