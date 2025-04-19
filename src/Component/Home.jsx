@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import logo from '../Images/logo1.png'
+import logo from '../Images/logo12.png'
 import main1 from '../Images/image1.jpg';
 import main2 from '../Images/image2.jpg';
 import main3 from '../Images/image3.jpg';
@@ -20,7 +20,7 @@ import i2 from '../Images/icon2.svg'
 import i3 from '../Images/icon3.svg'
 
 // Coin icons
-import piIcon from '../Images/coins/pi.svg'
+import piIcon from '../Images/coins/pilogo1.png'
 import dogeIcon from '../Images/coins/doge.svg'
 import p2pIcon from '../Images/coins/p2p.svg'
 import oceanIcon from '../Images/coins/ocean.svg'
@@ -101,12 +101,12 @@ const Home = () => {
   const buySteps = [
     {
       title: "1. Place an Order",
-      description: "Once you place a P2P order, the crypto asset will be escrowed by Athene P2P.",
+      description: "Once you place a P2P order, the crypto asset will be escrowed by Piswap P2P.",
       image: w1
     },
     {
       title: "2. Pay the Seller",
-      description: "Send money to the seller via the suggested payment methods. Complete the fiat transaction and notify the seller on Athene P2P.",
+      description: "Send money to the seller via the suggested payment methods. Complete the fiat transaction and notify the seller on Piswap P2P.",
       image: w2
     },
     {
@@ -119,7 +119,7 @@ const Home = () => {
   const sellSteps = [
     {
       title: "1. List Your Crypto",
-      description: "Create a sell order and your crypto will be securely escrowed by Athene P2P.",
+      description: "Create a sell order and your crypto will be securely escrowed by Piswap P2P.",
       image: w1
     },
     {
@@ -140,12 +140,12 @@ const Home = () => {
       answer: "P2P (Peer-to-Peer) exchange is a decentralized marketplace where users can trade cryptocurrencies directly with each other. It allows buyers and sellers to interact directly without intermediaries, offering flexible payment methods and competitive prices."
     },
     {
-      question: "Which cryptocurrencies are supported in the Athene P2P?",
-      answer: "Athene P2P supports multiple cryptocurrencies including PI, DOGE, P2P, OCEAN, SDA, LION, and GEM. Each cryptocurrency can be traded with various payment methods and competitive market rates."
+      question: "Which cryptocurrencies are supported in the Piswap P2P?",
+      answer: "Piswap P2P supports multiple cryptocurrencies including PI, DOGE, P2P, OCEAN, SDA, LION, and GEM. Each cryptocurrency can be traded with various payment methods and competitive market rates."
     },
     {
-      question: "Why is Athene P2P better than other P2P marketplaces?",
-      answer: "Athene P2P offers enhanced security, lower fees, wider payment options, and faster transaction times. Our escrow service ensures safe trades, while our user-friendly interface makes trading simple for both beginners and experienced users."
+      question: "Why is Piswap P2P better than other P2P marketplaces?",
+      answer: "Piswap P2P offers enhanced security, lower fees, wider payment options, and faster transaction times. Our escrow service ensures safe trades, while our user-friendly interface makes trading simple for both beginners and experienced users."
     },
     {
       question: "As a P2P trader, how am I protected?",
@@ -165,8 +165,8 @@ const Home = () => {
     <div className="relative">
       {/* Welcome Slider Popup */}
       {showWelcomeSlider && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#1E1E3F] bg-opacity-95 p-4">
-          <div className="relative bg-[#2D2B55] rounded-3xl p-4 md:p-6 w-full max-w-4xl mx-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#4B0082] bg-opacity-95 p-4">
+          <div className="relative bg-[#663399] rounded-3xl p-4 md:p-6 w-full max-w-4xl mx-auto">
             {/* Close Button */}
             <button
               onClick={() => setShowWelcomeSlider(false)}
@@ -178,7 +178,7 @@ const Home = () => {
             </button>
 
             {/* Slider */}
-            <div className="relative h-[300px] md:h-[500px] overflow-hidden rounded-2xl border-2 border-[#3C3A75]">
+            <div className="relative h-[300px] md:h-[500px] overflow-hidden rounded-2xl border-2 border-[#9370DB]">
               {welcomeImages.map((image, index) => (
                 <div
                   key={index}
@@ -214,7 +214,7 @@ const Home = () => {
             {/* Navigation Arrows */}
             <button
               onClick={() => setCurrentSlide((prev) => (prev - 1 + welcomeImages.length) % welcomeImages.length)}
-              className="absolute left-4 top-1/2 -translate-y-1/2 bg-[#3C3A75] text-white rounded-full p-2 hover:bg-[#4A487F] transition-colors"
+              className="absolute left-4 top-1/2 -translate-y-1/2 bg-[#9370DB] text-white rounded-full p-2 hover:bg-[#8A2BE2] transition-colors"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
@@ -222,7 +222,7 @@ const Home = () => {
             </button>
             <button
               onClick={() => setCurrentSlide((prev) => (prev + 1) % welcomeImages.length)}
-              className="absolute right-4 top-1/2 -translate-y-1/2 bg-[#3C3A75] text-white rounded-full p-2 hover:bg-[#4A487F] transition-colors"
+              className="absolute right-4 top-1/2 -translate-y-1/2 bg-[#9370DB] text-white rounded-full p-2 hover:bg-[#8A2BE2] transition-colors"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
@@ -232,9 +232,9 @@ const Home = () => {
         </div>
       )}
 
-      <div className='bg-gradient-to-b from-[#1E1E3F] to-[#2D2B55] min-h-screen py-4 md:py-8'>
+      <div className='bg-gradient-to-b from-[#4B0082] to-[#663399] min-h-screen py-4 md:py-8'>
         {/* Marquee Section */}
-        <div className="w-full overflow-hidden whitespace-nowrap bg-black text-white py-2 mb-4 md:mb-6 text-sm md:text-base">
+        <div className="w-full overflow-hidden whitespace-nowrap bg-[#4B0082] text-white py-2 mb-4 md:mb-6 text-sm md:text-base">
           <div className="animate-marquee flex space-x-16">
             <p>Total Transaction Volume: ATH: 126M GEM: 6T USDT: 25M Other: 18T</p>
             <p>Total Commission: ATH: 3.2M GEM: 127B USDT: 1.3M</p>
@@ -256,40 +256,86 @@ const Home = () => {
         {/* Main Container */}
         <div className="w-full max-w-7xl mx-auto px-4">
           {/* Navigation Bar */}
-          <nav className="flex flex-col md:flex-row justify-between items-center px-4 md:px-8 py-4 bg-white rounded-2xl shadow-lg mb-4 md:mb-8 space-y-4 md:space-y-0">
-            <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-8 w-full md:w-auto">
+          <nav className="flex items-center justify-between px-4 md:px-8 py-4 bg-[#663399] rounded-2xl shadow-lg mb-4 md:mb-8">
+            {/* Left side - Logo and Brand */}
+            <div className="flex items-center gap-4">
               <img src={logo} alt="logo" className="w-20 md:w-24 h-auto" />
-              <span className="font-semibold">PiSawp Network</span>
-              <button 
-                onClick={() => setShowCryptoRegister(true)}
-                className="text-blue-600 hover:underline whitespace-nowrap"
-              >
-                Register for Listing
-              </button>
+              <span className="bold text-yellow-400">PiSawp Network</span>
             </div>
-            <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-6 w-full md:w-auto">
+
+            {/* Right side - Buttons and Menu */}
+            <div className="flex items-center gap-4">
+              {/* Login Button */}
               <button 
                 onClick={() => setShowLoginPopup(true)} 
-                className="hover:text-gray-600 transition-colors w-full md:w-auto"
+                className="text-yellow-400 hover:text-yellow-300 transition-colors"
               >
                 Login
               </button>
-              <button 
-                onClick={() => setShowRegisterPopup(true)}
-                className="bg-gray-800 text-white px-4 py-2 rounded-full hover:bg-gray-700 transition w-full md:w-auto"
-              >
-                Register
-              </button>
-              <button 
-                onClick={() => setIsOpen(!isOpen)}
-                className="flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 country-selector min-w-[120px] w-full md:w-auto"
-              >
-                <span className="text-xl">{selectedCountry.flag}</span>
-                <span className="text-sm font-medium text-gray-700">{selectedCountry.code}</span>
-                <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
+
+              {/* Mobile Menu Button */}
+              <div className="relative md:hidden">
+                <button 
+                  onClick={() => setIsOpen(!isOpen)}
+                  className="flex items-center justify-center p-2 text-yellow-400"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+                  </svg>
+                </button>
+
+                {/* Mobile Menu Dropdown */}
+                {isOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-[#663399] rounded-lg shadow-lg py-2 z-50">
+                    <button 
+                      onClick={() => setShowRegisterPopup(true)}
+                      className="w-full text-left px-4 py-2 text-yellow-400 hover:bg-[#9370DB]"
+                    >
+                      Register
+                    </button>
+                    <div className="border-t border-[#9370DB] my-2"></div>
+                    <div className="max-h-60 overflow-y-auto">
+                      {countries.map((country) => (
+                        <button
+                          key={country.code}
+                          onClick={() => {
+                            setSelectedCountry(country);
+                            setIsOpen(false);
+                          }}
+                          className={`w-full text-left px-4 py-2 text-yellow-400 hover:bg-[#9370DB] flex items-center gap-2 ${
+                            selectedCountry.code === country.code ? 'bg-[#9370DB]' : ''
+                          }`}
+                        >
+                          <span className="text-xl">{country.flag}</span>
+                          <span className="text-sm font-medium">{country.name}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Desktop Buttons */}
+              <div className="hidden md:flex items-center gap-4">
+                <button 
+                  onClick={() => setShowRegisterPopup(true)}
+                  className="bg-[#9370DB] text-yellow-400 px-4 py-2 rounded-full hover:bg-[#8A2BE2] transition"
+                >
+                  Register
+                </button>
+                <div className="relative">
+                  <button 
+                    onClick={() => setIsOpen(!isOpen)}
+                    className="flex items-center justify-center gap-2 px-4 py-2 border border-[#9370DB] rounded-lg text-yellow-400 hover:bg-[#9370DB] country-selector"
+                  >
+                    <span className="text-xl">{selectedCountry.flag}</span>
+                    <span className="text-sm font-medium">{selectedCountry.name}</span>
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
             </div>
           </nav>
 
@@ -297,39 +343,47 @@ const Home = () => {
           <div className="flex justify-end mb-4 md:mb-8 px-4">
             <button 
               onClick={scrollToFaq}
-              className="bg-yellow-400 text-black px-4 py-2 rounded-full hover:bg-yellow-500 transition w-full md:w-auto"
+              className="bg-yellow-400 text-[#4B0082] px-4 py-2 rounded-full hover:bg-yellow-300 transition"
             >
               User Guide
             </button>
           </div>
 
-          {/* Main Banner Section */}
-          <div className="mb-4 md:mb-8 px-4">
+          {/* Main Banner Section - Hidden on Mobile */}
+          <div className="mb-4 md:mb-8 px-4 hidden md:block">
             <img src={main1} alt="Main Banner" className="w-full h-auto rounded-2xl shadow-lg" />
           </div>
 
           {/* Image Grid Section */}
           <div className="mb-4 md:mb-8 px-4">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-              <img src={main2} alt="Feature 1" className="w-full h-32 md:h-48 object-cover rounded-xl shadow-md hover:shadow-lg transition-shadow" />
-              <img src={main3} alt="Feature 2" className="w-full h-32 md:h-48 object-cover rounded-xl shadow-md hover:shadow-lg transition-shadow" />
-              <img src={main4} alt="Feature 3" className="w-full h-32 md:h-48 object-cover rounded-xl shadow-md hover:shadow-lg transition-shadow" />
-              <img src={main5} alt="Feature 4" className="w-full h-32 md:h-48 object-cover rounded-xl shadow-md hover:shadow-lg transition-shadow" />
+            <div className="flex overflow-x-auto gap-4 md:gap-6 pb-4 md:grid md:grid-cols-4 scrollbar-hide">
+              <div className="flex-none w-[280px] md:w-auto">
+                <img src={main2} alt="Feature 1" className="w-full h-32 md:h-48 object-cover rounded-xl shadow-md hover:shadow-lg transition-shadow" />
+              </div>
+              <div className="flex-none w-[280px] md:w-auto">
+                <img src={main3} alt="Feature 2" className="w-full h-32 md:h-48 object-cover rounded-xl shadow-md hover:shadow-lg transition-shadow" />
+              </div>
+              <div className="flex-none w-[280px] md:w-auto">
+                <img src={main4} alt="Feature 3" className="w-full h-32 md:h-48 object-cover rounded-xl shadow-md hover:shadow-lg transition-shadow" />
+              </div>
+              <div className="flex-none w-[280px] md:w-auto">
+                <img src={main5} alt="Feature 4" className="w-full h-32 md:h-48 object-cover rounded-xl shadow-md hover:shadow-lg transition-shadow" />
+              </div>
             </div>
           </div>
 
           {/* Trading Box Container */}
-          <div className="bg-white rounded-2xl shadow-lg overflow-hidden mx-4">
+          <div className="bg-[#663399] rounded-2xl shadow-lg overflow-hidden mx-4">
             {/* Trading Section */}
             <div className="px-4 md:px-8 py-4 md:py-6">
               {/* Buy/Sell and Coins Section */}
-              <div className="flex flex-col md:flex-row items-center justify-between mb-6 border-b border-gray-200 pb-4 space-y-4 md:space-y-0">
+              <div className="flex flex-col md:flex-row items-center justify-between mb-6 border-b border-[#9370DB] pb-4 space-y-4 md:space-y-0">
                 <div className="flex items-center gap-4 w-full md:w-auto">
                   <button 
                     onClick={() => handleModeToggle('buy')}
                     className={`relative px-8 md:px-12 py-2.5 font-medium transition-colors shadow-sm w-full md:w-auto ${
                       !isSellMode 
-                        ? 'bg-[#40E0B5] text-white' 
+                        ? 'bg-[#9370DB] text-white' 
                         : 'bg-[#E8E8E8] text-[#464646] hover:bg-gray-100'
                     }`}
                     style={{
@@ -343,7 +397,7 @@ const Home = () => {
                     onClick={() => handleModeToggle('sell')}
                     className={`relative px-8 md:px-12 py-2.5 font-medium transition-colors shadow-sm w-full md:w-auto ${
                       isSellMode 
-                        ? 'bg-red-500 text-white hover:bg-red-600' 
+                        ? 'bg-[#9370DB] text-white hover:bg-[#8A2BE2]' 
                         : 'bg-[#E8E8E8] text-[#464646] hover:bg-gray-100'
                     }`}
                     style={{
@@ -377,11 +431,11 @@ const Home = () => {
               {/* Table Section */}
               <div className="border-t border-gray-100 overflow-x-auto">
                 {/* Table Header */}
-                <div className="grid grid-cols-4 py-4 border-b border-gray-200 min-w-[600px]">
-                  <div className="text-gray-600 font-bold px-2">{isSellMode ? 'Buyer' : 'Seller'}</div>
-                  <div className="text-gray-600 font-bold px-2">Price</div>
-                  <div className="text-gray-600 font-bold px-2">Available/Limit</div>
-                  <div className="text-gray-600 font-bold px-2">Transaction</div>
+                <div className="grid grid-cols-4 py-4 border-b border-[#9370DB] min-w-[600px]">
+                  <div className="text-yellow-400 font-semibold px-2">{isSellMode ? 'Buyer' : 'Seller'}</div>
+                  <div className="text-yellow-400 font-semibold px-2">Price</div>
+                  <div className="text-yellow-400 font-semibold px-2">Available/Limit</div>
+                  <div className="text-yellow-400 font-semibold px-2">Transaction</div>
                 </div>
 
                 {/* Table Content */}
@@ -404,27 +458,28 @@ const Home = () => {
                   ].map((item, index) => (
                     <div 
                       key={index} 
-                      className="grid grid-cols-4 py-6 items-center hover:bg-gray-50 transition-colors"
+                      className="grid grid-cols-4 py-6 items-center transition-colors focus:border-2 focus:border-white"
+                      tabIndex="0"
                     >
-                      <div>
-                        <p className="text-gray-800 font-normal">{item.seller}</p>
-                        <p className="text-gray-500 text-sm font-normal">{item.transactions}</p>
+                      <div className="px-2 md:px-4">
+                        <p className="text-yellow-400 font-normal truncate">{item.seller}</p>
+                        <p className="text-yellow-400 text-sm font-normal">{item.transactions}</p>
                       </div>
-                      <div>
+                      <div className="px-2 md:px-4">
                         <div className="flex items-baseline">
-                          <span className="text-xl font-normal text-gray-800">{item.price.split(' ')[0]}</span>
-                          <span className="ml-1 text-gray-500 font-normal">{item.price.split(' ')[1]}</span>
+                          <span className="text-xl font-normal text-yellow-400">{item.price.split(' ')[0]}</span>
+                          <span className="ml-1 text-yellow-400 font-normal">{item.price.split(' ')[1]}</span>
                         </div>
                       </div>
-                      <div>
-                        <p className="text-gray-800 font-normal">{item.available}</p>
-                        <p className="text-gray-500 text-sm font-normal">{item.limit}</p>
+                      <div className="px-2 md:px-4">
+                        <p className="text-yellow-400 font-normal">{item.available}</p>
+                        <p className="text-yellow-400 text-sm font-normal">{item.limit}</p>
                       </div>
-                      <div>
-                        <button className={`px-8 py-2 rounded-full transition-colors font-normal ${
+                      <div className="px-2 md:px-4">
+                        <button className={`px-8 py-2 rounded-full transition-colors font-bold ${
                           isSellMode 
-                            ? 'bg-red-500 text-white hover:bg-red-600' 
-                            : 'bg-[#40E0B5] text-white hover:bg-[#3acca3]'
+                            ? 'bg-[#9370DB] text-yellow-400 hover:bg-[#8A2BE2]' 
+                            : 'bg-[#9370DB] text-yellow-400 hover:bg-[#8A2BE2]'
                         }`}>
                           {isSellMode ? 'Sell' : 'Buy'}
                         </button>
@@ -478,13 +533,13 @@ const Home = () => {
         </div>
       </div>
 
-      {/* Earn More Section */}
+      {/* Earn More Section
       <div className="w-full max-w-7xl mx-auto px-4 bg-white mt-8 md:mt-12">
         <div className="flex flex-col md:flex-row items-center justify-between py-6 md:py-8">
           <div className="w-full md:w-1/2 text-center md:text-left mb-6 md:mb-0">
-            <h1 className="text-2xl md:text-3xl font-bold mb-4">Earn more ATH on the Athene App</h1>
+            <h1 className="text-2xl md:text-3xl font-bold mb-4">Earn more ATH on the Piswap App</h1>
             <p className="mb-4 font-bold">
-              You can download the Athene app on the App Store or Google Play.<br />
+              You can download the Piswap app on the App Store or Google Play.<br />
               Then register an account to receive many promotions.
             </p>
             <div className="flex flex-col md:flex-row gap-4 justify-center md:justify-start">
@@ -496,7 +551,7 @@ const Home = () => {
             <img src={e1} alt="Mobile App" className="w-full max-w-[300px] md:max-w-[500px] h-auto" />
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* FAQ Section */}
       <div ref={faqRef} className="w-full max-w-7xl mx-auto px-4 bg-white mt-8 md:mt-12 py-6">
@@ -506,7 +561,7 @@ const Home = () => {
             key={index}
             className="border-b border-gray-500 py-4"
           >
-            <div 
+             <div 
               className="flex justify-between items-center cursor-pointer"
               onClick={() => setExpandedFaq(expandedFaq === index ? null : index)}
             >
@@ -527,7 +582,7 @@ const Home = () => {
       </div>
 
       {/* Footer */}
-      <footer className="bg-[#1E1E3F] text-white py-8">
+      <footer className="bg-[#4B0082] text-white py-8">
         <div className="container mx-auto px-4">
           <div className="flex flex-wrap justify-between items-center">
             {/* Logo */}
@@ -540,7 +595,7 @@ const Home = () => {
               {/* Links */}
               <div className="flex flex-wrap justify-center md:justify-start gap-4 md:gap-6 font-bold text-sm md:text-base">
                 <p>PiSawp Network</p>
-                <p>Download App</p>
+                {/* <p>Download App</p> */}
                 <Link to="/Privacy" className="hover:underline cursor-pointer">Privacy Policy</Link>
                 <Link to="/terms-of-use" className="hover:underline cursor-pointer">Terms of Use</Link>
                 <button 
